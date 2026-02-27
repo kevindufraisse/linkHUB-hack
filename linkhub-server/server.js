@@ -134,7 +134,7 @@ app.post("/feeds/update-lists", (req, res) => {
     }
   }
   const allFeeds = db.prepare("SELECT * FROM feeds ORDER BY position").all().map(f => ({
-    ...f, items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id)
+    ...f, is_admin: true, items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id)
   }));
   res.json({ success: true, data: allFeeds });
 });
@@ -416,6 +416,7 @@ app.get("/statistics/daily", (req, res) => {
 app.get("/settings", (req, res) => res.json({}));
 app.post("/settings", (req, res) => res.json({}));
 app.get("/past-posts", (req, res) => res.json([]));
+app.post("/past-posts", (req, res) => res.json({ success: true, id: uid() }));
 app.get("/feedback", (req, res) => res.json({}));
 app.get("/comments/streaks", (req, res) => res.json({ streakCounter: getStreak(), consecutiveDays: getStreak() }));
 app.get("/comments/count", (req, res) => {
