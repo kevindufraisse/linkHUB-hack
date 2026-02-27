@@ -1,0 +1,4 @@
+linkhub-server/node_modules/
+linkhub-server/linkhub.db
+linkhub-server/linkhub.db-shm
+linkhub-server/linkhub.db-wal
