@@ -75,7 +75,6 @@ app.get("/feeds", (req, res) => {
   } else {
     feeds = db.prepare("SELECT * FROM feeds ORDER BY position").all();
   }
-  const items = db.prepare("SELECT * FROM feed_items WHERE feed_id = ? ORDER BY created_at DESC").bind("x");
   const result = feeds.map(f => ({
     ...f,
     is_private: !!f.is_private,
