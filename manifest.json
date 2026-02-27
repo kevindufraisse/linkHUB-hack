@@ -1,0 +1,826 @@
+{
+  "icons": {
+    "16": "icon16.plasmo.6c567d50.png",
+    "32": "icon32.plasmo.76b92899.png",
+    "48": "icon48.plasmo.aced7582.png",
+    "64": "icon64.plasmo.8bb5e6e0.png",
+    "128": "icon128.plasmo.3c1ed2d2.png"
+  },
+  "manifest_version": 3,
+  "action": {
+    "default_icon": {
+      "16": "icon16.plasmo.6c567d50.png",
+      "32": "icon32.plasmo.76b92899.png",
+      "48": "icon48.plasmo.aced7582.png",
+      "64": "icon64.plasmo.8bb5e6e0.png",
+      "128": "icon128.plasmo.3c1ed2d2.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "version": "1.7.32",
+  "author": "Matteo Kocken",
+  "name": "LinkHub",
+  "description": "Attract clients by commenting on LinkedIn",
+  "background": {
+    "service_worker": "static/background/index.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": [
+    "storage",
+    "webRequest"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_comments_new_version.24d96005.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_button_comments_new_version.6787d18b.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/in/*"
+      ],
+      "js": [
+        "linkedin-profile-analyzer.16e76ed2.js"
+      ],
+      "run_at": "document_idle",
+      "css": []
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_keyboard_handler.d45778a6.js"
+      ],
+      "run_at": "document_start",
+      "css": []
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_comments.33b19ea4.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_button_comments.3737a5b9.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_posts_add_list.5219607c.js"
+      ],
+      "css": [
+        "font.a1180259.css",
+        "linkedin_posts_add_list.3381446c.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_focus.74b54b62.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_posts_add_list_new_version.b641c0a2.js"
+      ],
+      "css": [
+        "font.a1180259.css",
+        "linkedin_posts_add_list.3381446c.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_preloader.c64aa720.js"
+      ],
+      "run_at": "document_start",
+      "css": []
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_profile_button.eba70fd9.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "post.ecf7a447.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "linkedin_sidepanel.a3e64db4.js"
+      ],
+      "exclude_matches": [
+        "https://*.linkedin.com/home*"
+      ],
+      "css": [
+        "font.a1180259.css",
+        "font.a1180259.css",
+        "linkedin_onboarding.56dbea8e.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/posts/*",
+        "https://*.linkedin.com/feed/update/*"
+      ],
+      "js": [
+        "linkedin_post_focus_button.14a57e14.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://linkpost.gg/*",
+        "https://*.linkpost.gg/*"
+      ],
+      "js": [
+        "linkpost_identity.38814c2c.js"
+      ],
+      "run_at": "document_start",
+      "css": []
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "comment_counter_widget.4b365a63.js"
+      ],
+      "css": []
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "js": [
+        "daystreak_widget.66e8c9d0.js"
+      ],
+      "css": [
+        "font.a1180259.css"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://*.linkedin.com/*",
+    "http://localhost:3456/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "review-l.cd300ac1.jpg",
+        "review-o.7274c617.png",
+        "review-t.7d81b958.jpg",
+        "logo_light_horizontal.717b75c4.svg",
+        "yannis-pp.c2f65eb4.png",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkhub.98a4e327.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkhub.98a4e327.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2",
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "logo_light_horizontal.717b75c4.svg",
+        "yannis-pp.c2f65eb4.png",
+        "logo_light_vertical.8b9b1a9c.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*",
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "logo_light_horizontal.717b75c4.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2",
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkhub.98a4e327.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkhub.98a4e327.svg",
+        "linkpost.2d9c2491.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/*"
+      ],
+      "resources": [
+        "supabase.b8483991.js",
+        "browser-2.20260216.js",
+        "get-comments.a097fcaf.js",
+        "linkhub.98a4e327.svg",
+        "linkpost.2d9c2491.svg",
+        "linkedin_comments_new_version.95bad065.css",
+        "CircularStd-Black.086ffe33.woff",
+        "CircularStd-Black.8950dcf8.ttf",
+        "CircularStd-Bold.4ee7d622.woff",
+        "CircularStd-Bold.6cacb817.ttf",
+        "CircularStd-Medium.6c8df4e0.woff",
+        "CircularStd-Medium.618c793b.ttf",
+        "CircularStd-Book.f68b9dfe.woff",
+        "CircularStd-Book.f033bdb1.ttf",
+        "JokkerTRIAL-Regular.d9c89790.woff2",
+        "JokkerTRIAL-Bold.02ccc21f.woff2",
+        "JokkerTRIAL-Semibold.7cafca69.woff2",
+        "JokkerTRIAL-SemiboldItalic.c89f700f.woff2",
+        "JokkerTRIAL-RegularItalic.407ad836.woff2",
+        "JokkerTRIAL-BoldItalic.a4b4dfd4.woff2",
+        "Jersey25-Regular.d5b2bca9.ttf",
+        "Inter-Regular.856db181.woff2",
+        "Inter-Medium.a991eb25.woff2",
+        "Inter-Bold.18df57e9.woff2",
+        "Inter-SemiBold.1e9de5df.woff2",
+        "Inter-Thin.9da03f0b.woff2"
+      ]
+    }
+  ]
+}
