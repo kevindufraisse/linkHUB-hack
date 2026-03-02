@@ -55,6 +55,18 @@ db.exec(`
     date TEXT PRIMARY KEY,
     count INTEGER DEFAULT 0
   );
+
+  CREATE TABLE IF NOT EXISTS knowledge_base_items (
+    id TEXT PRIMARY KEY,
+    title TEXT DEFAULT '',
+    content TEXT DEFAULT '',
+    type TEXT DEFAULT 'text',
+    file_id TEXT DEFAULT '',
+    file_name TEXT DEFAULT '',
+    file_size INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 function uid() {
@@ -472,6 +484,10 @@ app.post("/update-reads/:id/is-read", (req, res) => res.json({ success: true }))
 app.get("/posts/sync-session/active", (req, res) => res.json(null));
 app.get("/posts/sync-session/last-completed", (req, res) => res.json(null));
 app.post("/posts/sync-session/start", (req, res) => res.json({ id: "local-sync" }));
+app.get("/posts/sync-session/:id/progress", (req, res) => res.json({ progress: 100, total: 0 }));
+app.post("/posts/sync-session/:id/complete", (req, res) => res.json({ success: true }));
+app.post("/posts/sync-session/:id/pause", (req, res) => res.json({ success: true }));
+app.post("/posts/sync-session/:id/fail", (req, res) => res.json({ success: true }));
 app.post("/posts/sync-with-analytics", (req, res) => res.json({ success: true }));
 app.post("/posts/summary", async (req, res) => {
   const key = process.env.OPENAI_KEY || "";
@@ -516,6 +532,27 @@ app.post("/analytics/generation-sessions", (req, res) => res.json({ success: tru
 app.post("/analytics/comment-sessions", (req, res) => res.json({ success: true }));
 app.get("/accounts/is-my-linkedin-id", (req, res) => res.json({ isMyLinkedinId: false }));
 app.delete("/past-posts/:id", (req, res) => res.json({ success: true }));
+
+// ===================== KNOWLEDGE BASE ITEMS =====================
+
+app.get("/knowledge-base-items", (req, res) => {
+  const items = db.prepare("SELECT * FROM knowledge_base_items ORDER BY created_at DESC").all();
+  res.json(items);
+});
+
+app.post("/knowledge-base-items", (req, res) => {
+  const id = uid();
+  const { title = "", content = "", type = "text", file_id = "", file_name = "", file_size = 0 } = req.body;
+  db.prepare("INSERT INTO knowledge_base_items (id, title, content, type, file_id, file_name, file_size) VALUES (?, ?, ?, ?, ?, ?, ?)")
+    .run(id, title, content, type, file_id, file_name, file_size);
+  const item = db.prepare("SELECT * FROM knowledge_base_items WHERE id = ?").get(id);
+  res.json(item);
+});
+
+app.delete("/knowledge-base-items/:id", (req, res) => {
+  db.prepare("DELETE FROM knowledge_base_items WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
 
 // Catch-all
 app.use((req, res) => {
