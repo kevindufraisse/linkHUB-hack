@@ -90,9 +90,14 @@ app.post("/feeds", (req, res) => {
   const { name, is_private } = req.body;
   const pos = db.prepare("SELECT COUNT(*) as c FROM feeds").get().c;
   db.prepare("INSERT INTO feeds (id, name, is_private, position) VALUES (?, ?, ?, ?)").run(id, name || "New List", is_private ? 1 : 0, pos);
-  const feed = db.prepare("SELECT * FROM feeds WHERE id = ?").get(id);
-  feed.items = [];
-  feed.is_admin = true;
+  const raw = db.prepare("SELECT * FROM feeds WHERE id = ?").get(id);
+  const feed = {
+    ...raw,
+    is_private: !!raw.is_private,
+    is_in_onboarding: !!raw.is_in_onboarding,
+    is_admin: true,
+    items: [],
+  };
   res.json(feed);
 });
 
@@ -134,7 +139,11 @@ app.post("/feeds/update-lists", (req, res) => {
     }
   }
   const allFeeds = db.prepare("SELECT * FROM feeds ORDER BY position").all().map(f => ({
-    ...f, is_admin: true, items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id)
+    ...f,
+    is_private: !!f.is_private,
+    is_in_onboarding: !!f.is_in_onboarding,
+    is_admin: true,
+    items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id),
   }));
   res.json({ success: true, data: allFeeds });
 });
@@ -243,6 +252,24 @@ app.post("/feeds/feed-items", (req, res) => {
     }
   } else {
     console.log("[feed-items] UNEXPECTED FORMAT:", Object.keys(req.body));
+  }
+  res.json({ success: true });
+});
+
+app.post("/feeds/sync-posts", (req, res) => {
+  res.json({ success: true });
+});
+
+app.post("/feeds/update-lists-without-profiles", (req, res) => {
+  const { lists } = req.body;
+  if (lists && Array.isArray(lists)) {
+    for (const list of lists) {
+      const existing = db.prepare("SELECT id FROM feeds WHERE id = ?").get(list.id);
+      if (existing) {
+        db.prepare("UPDATE feeds SET name = ?, is_private = ?, position = ?, updated_at = datetime('now') WHERE id = ?")
+          .run(list.name, list.is_private ? 1 : 0, list.position || 0, list.id);
+      }
+    }
   }
   res.json({ success: true });
 });
