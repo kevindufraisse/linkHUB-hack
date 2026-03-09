@@ -10008,8 +10008,9 @@ var e, t;
               [T, E] = (0, n.useState)(!1);
             (0, n.useEffect)(() => {
               let t = o
+                .filter(Boolean)
                 .filter((t) =>
-                  t.items?.some((t) => t.profile.linkedin_id === e?.id),
+                  t.items?.some((t) => t.profile?.linkedin_id === e?.id),
                 )
                 .map((e) => e.id);
               (C(t), L(t));
@@ -10027,19 +10028,19 @@ var e, t;
                 F(e.id);
               },
               R = (e) => {
-                let t = o.map((e) => e.name),
+                let t = o.filter(Boolean).map((e) => e.name),
                   r = 2,
                   a = `${e} (${r})`;
                 for (; t.includes(a); ) (r++, (a = `${e} (${r})`));
                 return a;
               },
               O = async () => {
-                let r = o.find((t) => {
+                let r = o.filter(Boolean).find((t) => {
                   let r = S.includes(t.id),
                     o = !!(
                       t.items &&
                       Array.isArray(t.items) &&
-                      t.items.some((t) => t.profile.linkedin_id === e?.id)
+                      t.items.some((t) => t.profile?.linkedin_id === e?.id)
                     );
                   return r && (t.items?.length || 0) >= 27 && !o;
                 });
@@ -10050,9 +10051,9 @@ var e, t;
                 A(!0);
                 try {
                   let r = [];
-                  for (let t of o) {
+                  for (let t of o.filter(Boolean)) {
                     let o = S.includes(t.id),
-                      a = t.items?.some((t) => t.profile.linkedin_id === e?.id);
+                      a = t.items?.some((t) => t.profile?.linkedin_id === e?.id);
                     o && !a
                       ? r.push(
                           f(t.id, {
@@ -10166,7 +10167,7 @@ var e, t;
                               children: r("noListsYet"),
                             }),
                           o
-                            .filter((e) => e.is_admin)
+                            .filter((e) => e?.is_admin)
                             .map((t) => {
                               let o = !!(
                                   t.items &&
@@ -76156,7 +76157,7 @@ buffer/index.js:
                 [c, e, o, n, r],
               );
             return {
-              feeds: t.filter((e) => e.is_admin),
+              feeds: t.filter((e) => e?.is_admin),
               isDropdownVisible: i,
               isLoading: c,
               showDropdown: p,

@@ -55,6 +55,18 @@ db.exec(`
     date TEXT PRIMARY KEY,
     count INTEGER DEFAULT 0
   );
+
+  CREATE TABLE IF NOT EXISTS knowledge_base_items (
+    id TEXT PRIMARY KEY,
+    title TEXT DEFAULT '',
+    content TEXT DEFAULT '',
+    type TEXT DEFAULT 'text',
+    file_id TEXT DEFAULT '',
+    file_name TEXT DEFAULT '',
+    file_size INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 function uid() {
@@ -90,10 +102,31 @@ app.post("/feeds", (req, res) => {
   const { name, is_private } = req.body;
   const pos = db.prepare("SELECT COUNT(*) as c FROM feeds").get().c;
   db.prepare("INSERT INTO feeds (id, name, is_private, position) VALUES (?, ?, ?, ?)").run(id, name || "New List", is_private ? 1 : 0, pos);
-  const feed = db.prepare("SELECT * FROM feeds WHERE id = ?").get(id);
-  feed.items = [];
-  feed.is_admin = true;
+  const raw = db.prepare("SELECT * FROM feeds WHERE id = ?").get(id);
+  const feed = {
+    ...raw,
+    is_private: !!raw.is_private,
+    is_in_onboarding: !!raw.is_in_onboarding,
+    is_admin: true,
+    items: [],
+  };
   res.json(feed);
+});
+
+app.put("/feeds/items", (req, res) => {
+  // Bulk update feed items - must be defined before PUT /feeds/:id
+  const { selected, profile } = req.body;
+  if (selected && profile && Array.isArray(selected)) {
+    const id = uid();
+    for (const feedId of selected) {
+      const feed = db.prepare("SELECT id FROM feeds WHERE id = ?").get(feedId);
+      if (feed) {
+        db.prepare("INSERT INTO feed_items (id, feed_id, linkedin_id, name, photo, url, headline) VALUES (?, ?, ?, ?, ?, ?, ?)")
+          .run(uid(), feedId, profile.linkedin_id || "", profile.name || "", profile.photo || "", profile.url || "", profile.headline || "");
+      }
+    }
+  }
+  res.json({ success: true });
 });
 
 app.put("/feeds/:id", (req, res) => {
@@ -134,7 +167,11 @@ app.post("/feeds/update-lists", (req, res) => {
     }
   }
   const allFeeds = db.prepare("SELECT * FROM feeds ORDER BY position").all().map(f => ({
-    ...f, items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id)
+    ...f,
+    is_private: !!f.is_private,
+    is_in_onboarding: !!f.is_in_onboarding,
+    is_admin: true,
+    items: db.prepare("SELECT * FROM feed_items WHERE feed_id = ?").all(f.id),
   }));
   res.json({ success: true, data: allFeeds });
 });
@@ -203,22 +240,6 @@ app.delete("/feeds/:feedId/items/:itemId", (req, res) => {
   res.json({ success: true });
 });
 
-app.put("/feeds/items", (req, res) => {
-  // Bulk update feed items
-  const { selected, profile } = req.body;
-  if (selected && profile && Array.isArray(selected)) {
-    const id = uid();
-    for (const feedId of selected) {
-      const feed = db.prepare("SELECT id FROM feeds WHERE id = ?").get(feedId);
-      if (feed) {
-        db.prepare("INSERT INTO feed_items (id, feed_id, linkedin_id, name, photo, url, headline) VALUES (?, ?, ?, ?, ?, ?, ?)")
-          .run(uid(), feedId, profile.linkedin_id || "", profile.name || "", profile.photo || "", profile.url || "", profile.headline || "");
-      }
-    }
-  }
-  res.json({ success: true });
-});
-
 app.post("/feeds/feed-items", (req, res) => {
   console.log("[feed-items] Body:", JSON.stringify(req.body).slice(0, 500));
   const { selected, profile, listId, profiles } = req.body;
@@ -243,6 +264,24 @@ app.post("/feeds/feed-items", (req, res) => {
     }
   } else {
     console.log("[feed-items] UNEXPECTED FORMAT:", Object.keys(req.body));
+  }
+  res.json({ success: true });
+});
+
+app.post("/feeds/sync-posts", (req, res) => {
+  res.json({ success: true });
+});
+
+app.post("/feeds/update-lists-without-profiles", (req, res) => {
+  const { lists } = req.body;
+  if (lists && Array.isArray(lists)) {
+    for (const list of lists) {
+      const existing = db.prepare("SELECT id FROM feeds WHERE id = ?").get(list.id);
+      if (existing) {
+        db.prepare("UPDATE feeds SET name = ?, is_private = ?, position = ?, updated_at = datetime('now') WHERE id = ?")
+          .run(list.name, list.is_private ? 1 : 0, list.position || 0, list.id);
+      }
+    }
   }
   res.json({ success: true });
 });
@@ -416,6 +455,7 @@ app.get("/statistics/daily", (req, res) => {
 app.get("/settings", (req, res) => res.json({}));
 app.post("/settings", (req, res) => res.json({}));
 app.get("/past-posts", (req, res) => res.json([]));
+app.post("/past-posts", (req, res) => res.json({ success: true, id: uid() }));
 app.get("/feedback", (req, res) => res.json({}));
 app.get("/comments/streaks", (req, res) => res.json({ streakCounter: getStreak(), consecutiveDays: getStreak() }));
 app.get("/comments/count", (req, res) => {
@@ -444,6 +484,10 @@ app.post("/update-reads/:id/is-read", (req, res) => res.json({ success: true }))
 app.get("/posts/sync-session/active", (req, res) => res.json(null));
 app.get("/posts/sync-session/last-completed", (req, res) => res.json(null));
 app.post("/posts/sync-session/start", (req, res) => res.json({ id: "local-sync" }));
+app.get("/posts/sync-session/:id/progress", (req, res) => res.json({ progress: 100, total: 0 }));
+app.post("/posts/sync-session/:id/complete", (req, res) => res.json({ success: true }));
+app.post("/posts/sync-session/:id/pause", (req, res) => res.json({ success: true }));
+app.post("/posts/sync-session/:id/fail", (req, res) => res.json({ success: true }));
 app.post("/posts/sync-with-analytics", (req, res) => res.json({ success: true }));
 app.post("/posts/summary", async (req, res) => {
   const key = process.env.OPENAI_KEY || "";
@@ -483,11 +527,37 @@ app.get("/lumail/user-count", (req, res) => res.json({ userCount: 100 }));
 app.get("/rewrite-options/get-multiple", (req, res) => res.json({ options: [] }));
 app.get("/rewrite-options", (req, res) => res.json({ options: [] }));
 
-app.post("/analytics/focus-mode-sessions", (req, res) => res.json({ success: true }));
+app.post("/analytics/focus-mode-sessions", (req, res) => {
+  const id = uid();
+  res.json({ success: true, id });
+});
+
+app.patch("/analytics/focus-mode-sessions/:id", (req, res) => res.json({ success: true }));
 app.post("/analytics/generation-sessions", (req, res) => res.json({ success: true }));
 app.post("/analytics/comment-sessions", (req, res) => res.json({ success: true }));
 app.get("/accounts/is-my-linkedin-id", (req, res) => res.json({ isMyLinkedinId: false }));
 app.delete("/past-posts/:id", (req, res) => res.json({ success: true }));
+
+// ===================== KNOWLEDGE BASE ITEMS =====================
+
+app.get("/knowledge-base-items", (req, res) => {
+  const items = db.prepare("SELECT * FROM knowledge_base_items ORDER BY created_at DESC").all();
+  res.json(items);
+});
+
+app.post("/knowledge-base-items", (req, res) => {
+  const id = uid();
+  const { title = "", content = "", type = "text", file_id = "", file_name = "", file_size = 0 } = req.body;
+  db.prepare("INSERT INTO knowledge_base_items (id, title, content, type, file_id, file_name, file_size) VALUES (?, ?, ?, ?, ?, ?, ?)")
+    .run(id, title, content, type, file_id, file_name, file_size);
+  const item = db.prepare("SELECT * FROM knowledge_base_items WHERE id = ?").get(id);
+  res.json(item);
+});
+
+app.delete("/knowledge-base-items/:id", (req, res) => {
+  db.prepare("DELETE FROM knowledge_base_items WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
 
 // Catch-all
 app.use((req, res) => {
