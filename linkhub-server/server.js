@@ -113,6 +113,22 @@ app.post("/feeds", (req, res) => {
   res.json(feed);
 });
 
+app.put("/feeds/items", (req, res) => {
+  // Bulk update feed items - must be defined before PUT /feeds/:id
+  const { selected, profile } = req.body;
+  if (selected && profile && Array.isArray(selected)) {
+    const id = uid();
+    for (const feedId of selected) {
+      const feed = db.prepare("SELECT id FROM feeds WHERE id = ?").get(feedId);
+      if (feed) {
+        db.prepare("INSERT INTO feed_items (id, feed_id, linkedin_id, name, photo, url, headline) VALUES (?, ?, ?, ?, ?, ?, ?)")
+          .run(uid(), feedId, profile.linkedin_id || "", profile.name || "", profile.photo || "", profile.url || "", profile.headline || "");
+      }
+    }
+  }
+  res.json({ success: true });
+});
+
 app.put("/feeds/:id", (req, res) => {
   const { id } = req.params;
   const fields = req.body;
@@ -221,22 +237,6 @@ app.post("/feeds/:feedId/items", (req, res) => {
 
 app.delete("/feeds/:feedId/items/:itemId", (req, res) => {
   db.prepare("DELETE FROM feed_items WHERE (id = ? OR linkedin_id = ?) AND feed_id = ?").run(req.params.itemId, req.params.itemId, req.params.feedId);
-  res.json({ success: true });
-});
-
-app.put("/feeds/items", (req, res) => {
-  // Bulk update feed items
-  const { selected, profile } = req.body;
-  if (selected && profile && Array.isArray(selected)) {
-    const id = uid();
-    for (const feedId of selected) {
-      const feed = db.prepare("SELECT id FROM feeds WHERE id = ?").get(feedId);
-      if (feed) {
-        db.prepare("INSERT INTO feed_items (id, feed_id, linkedin_id, name, photo, url, headline) VALUES (?, ?, ?, ?, ?, ?, ?)")
-          .run(uid(), feedId, profile.linkedin_id || "", profile.name || "", profile.photo || "", profile.url || "", profile.headline || "");
-      }
-    }
-  }
   res.json({ success: true });
 });
 
@@ -527,7 +527,12 @@ app.get("/lumail/user-count", (req, res) => res.json({ userCount: 100 }));
 app.get("/rewrite-options/get-multiple", (req, res) => res.json({ options: [] }));
 app.get("/rewrite-options", (req, res) => res.json({ options: [] }));
 
-app.post("/analytics/focus-mode-sessions", (req, res) => res.json({ success: true }));
+app.post("/analytics/focus-mode-sessions", (req, res) => {
+  const id = uid();
+  res.json({ success: true, id });
+});
+
+app.patch("/analytics/focus-mode-sessions/:id", (req, res) => res.json({ success: true }));
 app.post("/analytics/generation-sessions", (req, res) => res.json({ success: true }));
 app.post("/analytics/comment-sessions", (req, res) => res.json({ success: true }));
 app.get("/accounts/is-my-linkedin-id", (req, res) => res.json({ isMyLinkedinId: false }));
